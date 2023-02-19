@@ -13,6 +13,8 @@ const passport = require('passport');
 
 const LocalStrategy = require('passport-local');
 const User = require('./model/user');
+var bodyParser = require('body-parser')
+
 const sanitizeHtml = require('sanitize-html');
 const Campground = require('./model/campground');
 const helmet = require('helmet');
@@ -47,6 +49,8 @@ mongoose.connect(dbUrl,{
 });
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true}))
 const store = new MongoDBStore(
     {
         mongoUrl:dbUrl,
@@ -70,7 +74,6 @@ const sessionConfig = {
         maxAge:1000*60*60*24*7
     }
 }
-
 app.use(express.json());
 app.use(session(sessionConfig));
 app.use(helmet());
