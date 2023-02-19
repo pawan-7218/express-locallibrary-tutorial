@@ -25,7 +25,7 @@ res.redirect('/campground' );}
 
 } catch(e) {
     
-    res.redirect('register')
+    console.log(e)
 }
 }));
 router.get('/login', (req,res)=>{
