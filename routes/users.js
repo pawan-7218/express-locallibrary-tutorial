@@ -11,7 +11,7 @@ const catchAsync = require('../utilities/catchAsync');
 router.get('/register', catchAsync((req, res)=>{
 res.render('users/register')
 }))
-router.post('/register' , catchAsync(async(req,res)=>{
+router.post('/register' , catchAsync(async(req,res ,next)=>{
 try{
 const { username,email, password} = req.body;
 const user = new User({email,username});
