@@ -22,7 +22,7 @@ req.login(registeredUser, err=>{
     req.flash('success','Welcome to Yelp Camp');
 res.redirect('/campground' );
 })
-const message ='Failed to add '
+
 } catch(e) {
     req.flash('error' , message);
     res.redirect('register')
