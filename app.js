@@ -286,6 +286,6 @@ if(!err.message) err.message = "Something went wrong";
     res.status(status).render('error' , {err});
    
 })
-app.listen(3000 , ()=>{
-    console.log('On port 3000');
+app.listen(8080 , ()=>{
+    console.log('On port 8080');
 })
