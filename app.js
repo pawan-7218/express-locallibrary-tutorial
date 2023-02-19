@@ -38,8 +38,8 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geoCoder = mbxGeocoding({accessToken:mapBoxToken});
 
 app.engine('ejs' , ejsMate);
-//const dbUrl ='mongodb://localhost:27017/yelp-app';
-const dbUrl =process.env.db_Url;
+const dbUrl ='mongodb://localhost:27017/yelp-app';
+ //const dbUrl =process.env.db_Url;
 mongoose.connect(dbUrl,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
@@ -286,6 +286,6 @@ if(!err.message) err.message = "Something went wrong";
     res.status(status).render('error' , {err});
    
 })
-app.listen(8080 , ()=>{
+app.listen(3000 , ()=>{
     console.log('On port 8080');
 })
