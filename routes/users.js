@@ -11,20 +11,20 @@ const catchAsync = require('../utilities/catchAsync');
 router.get('/register', catchAsync((req, res)=>{
 res.render('users/register')
 }))
-router.post('/register' , catchAsync(async(req,res ,next)=>{
+router.post('/register' , catchAsync(async(req,res)=>{
 try{
 const { username,email, password} = req.body;
 const user = new User({email,username});
 const registeredUser = await User.register(user, password);
 console.log(registeredUser);
 req.login(registeredUser, err=>{
-    if (err) return next (err);
+    if (err){ return (err)} else{
     req.flash('success','Welcome to Yelp Camp');
-res.redirect('/campground' );
+res.redirect('/campground' );}
 })
 
 } catch(e) {
-    req.flash('error' , message);
+    
     res.redirect('register')
 }
 }));
