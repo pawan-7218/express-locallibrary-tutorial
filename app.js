@@ -5,6 +5,7 @@ if(process.env.NODE_ENV !=='production')
 
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 const compression = require('compression');
 app.use(compression());
 const flash = require('connect-flash');
@@ -38,15 +39,23 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geoCoder = mbxGeocoding({accessToken:mapBoxToken});
 
 app.engine('ejs' , ejsMate);
+const dbUrl =process.env.db_Url;
 //const dbUrl ='mongodb://localhost:27017/yelp-app';
- const dbUrl =process.env.db_Url;
-mongoose.connect(dbUrl,{
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(dbUrl,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     
-}).catch('error',(e)=>{
-    console.log(e);
-});
+} );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+ 
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(bodyParser.json())
@@ -70,6 +79,7 @@ const sessionConfig = {
     saveUninitialized:true,
     cookie:{
         httpOnly:true,
+     secure:true,
         expires:Date.now() + 1000*60*60*24*7,
         maxAge:1000*60*60*24*7
     }
@@ -190,9 +200,9 @@ app.get('/fakeUser', async(req,res)=>{
 const newUser = await User.register(user , 'pumpkin');
 res.send(newUser);
 })
-app.get('/', (req,res)=>{
-    res.render('home');
-})
+app.get('/',(req,res)=>{
+ res.render('home')});
+ 
 app.get('/campground' , async(req , res)=>{
   const camp = await Campground.find({});
  const message =req.flash('success')
@@ -288,7 +298,12 @@ const {status = 500 } = err;
 if(!err.message) err.message = "Something went wrong";
     res.status(status).render('error' , {err});
    
-})
-app.listen(3000 , ()=>{
+});
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })})
+/*app.listen(port , ()=>{
     console.log('On port 8080');
-})
+})*/
