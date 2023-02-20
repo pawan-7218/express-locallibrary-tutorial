@@ -38,15 +38,23 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geoCoder = mbxGeocoding({accessToken:mapBoxToken});
 
 app.engine('ejs' , ejsMate);
+const dbUrl =process.env.db_Url;
 //const dbUrl ='mongodb://localhost:27017/yelp-app';
- const dbUrl =process.env.db_Url;
-mongoose.connect(dbUrl,{
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.db_Url ,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
     
-}).catch('error',(e)=>{
-    console.log(e);
-});
+} );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+ 
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(bodyParser.json())
