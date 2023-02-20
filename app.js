@@ -202,8 +202,11 @@ app.get('/fakeUser', async(req,res)=>{
 const newUser = await User.register(user , 'pumpkin');
 res.send(newUser);
 })
-app.get('/',(req,res)=>{
- res.render('home')});
+app.get('/',async(req,res)=>{
+    const camp = await Campground.find({});
+ const message = req.flash('success')
+ res.render('home' , {camp , message  });
+});
  
 app.get('/campground' , async(req , res)=>{
   const camp = await Campground.find({});
