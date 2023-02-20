@@ -5,6 +5,7 @@ if(process.env.NODE_ENV !=='production')
 
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 const compression = require('compression');
 app.use(compression());
 const flash = require('connect-flash');
@@ -298,7 +299,11 @@ if(!err.message) err.message = "Something went wrong";
     res.status(status).render('error' , {err});
    
 })
-const port = process.env.PORT || 3000;
-app.listen(port , ()=>{
+
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+/*app.listen(port , ()=>{
     console.log('On port 8080');
-})
+})*/
