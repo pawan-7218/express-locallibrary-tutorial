@@ -38,8 +38,8 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geoCoder = mbxGeocoding({accessToken:mapBoxToken});
 
 app.engine('ejs' , ejsMate);
-const dbUrl ='mongodb://localhost:27017/yelp-app';
- //const dbUrl =process.env.db_Url;
+//const dbUrl ='mongodb://localhost:27017/yelp-app';
+ const dbUrl =process.env.db_Url;
 mongoose.connect(dbUrl,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
@@ -191,6 +191,9 @@ app.get('/fakeUser', async(req,res)=>{
 const newUser = await User.register(user , 'pumpkin');
 res.send(newUser);
 })
+app.get('/',(req,res)=>{
+ res.render('home')};
+ 
 app.get('/campground' , async(req , res)=>{
   const camp = await Campground.find({});
  const message =req.flash('success')
