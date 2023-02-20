@@ -46,7 +46,7 @@ const connectDB = async () => {
     const conn = await mongoose.connect(dbUrl,{
     useNewUrlParser:true,
     useUnifiedTopology:true,
-    
+    useFindAndModify:false
 } );
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
@@ -60,10 +60,11 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true}))
+
 const store = new MongoDBStore(
     {
         mongoUrl:dbUrl,
-        secret:'thisshouldbebettersecret',
+        secret:process.env.SECRET ||'thisshouldbebettersecret',
         touchAfter:24*60*60
     }
 );
@@ -72,9 +73,9 @@ store.on('error' , function(e){
 })
 
 const sessionConfig = {
-    store:store,
+    store,
     name:'session',
-    secret:'thisshouldbebettersecret',
+    secret:process.env.SECRET ||'thisshouldbebettersecret',
     resave:false,
     saveUninitialized:true,
     cookie:{
@@ -84,8 +85,9 @@ const sessionConfig = {
         maxAge:1000*60*60*24*7
     }
 }
-app.use(express.json());
 app.use(session(sessionConfig));
+
+app.use(express.json());
 app.use(helmet());
 const scriptSrcUrls =[
     "https://api.tiles.mapbox.com/",
