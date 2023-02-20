@@ -201,7 +201,7 @@ const newUser = await User.register(user , 'pumpkin');
 res.send(newUser);
 })
 app.get('/',(req,res)=>{
- res.render('home')};
+ res.render('home')});
  
 app.get('/campground' , async(req , res)=>{
   const camp = await Campground.find({});
